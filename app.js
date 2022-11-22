@@ -1,45 +1,28 @@
 const express = require('express');
+require('dotenv').config();
 
-const userDb = require('./dataBase/users');
+const userRouter = require('./router/user.router');
+const configs = require('./config/config');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.get('/users', (req, res) => {
-    console.log('Users Endpoint');
-
-    res.json(userDb);
-});
-
-app.post('/users', (req, res) => {
-    const userInfo = req.body;
-
-    userDb.push(userInfo);
-
-    res.status(201).json('Created');
-});
-
-app.put('/users/:userId', (req, res) => {
-    const newUserInfo = req.body;
-    const { userId } = req.params;
-
-    userDb[userId] = newUserInfo;
-
-    res.json('Updated');
-});
+app.use('/users', userRouter);
 
 app.get('/', (req, res) => {
     res.json('Welcome');
 });
 
-app.get('/users/:userId', (req, res) => {
-    const {userId} = req.params;
+app.use((err,req, res, next) => {
 
-    res.json(userDb[userId]);
+    res.status(err.status || 500).json({
+        message: err.message || 'Unknown error',
+        status: err.status || 402
+    });
 });
 
-app.listen(5000, () => {
-    console.log('Server listen 5000');
+app.listen(configs.PORT, () => {
+    console.log(`Server listen ${configs.PORT}`);
 });
