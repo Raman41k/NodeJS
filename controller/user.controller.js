@@ -1,4 +1,3 @@
-const userDb = require("../dataBase/users.json");
 const {fileService} = require("../service");
 
 module.exports = {
@@ -20,14 +19,52 @@ module.exports = {
         }
     },
 
-    updateUser: (req, res, next) => {
+    updateUser: async (req, res, next) => {
         try {
-            const newUserInfo = req.body;
-            const {userId} = req.params;
+            const {user, users, body} = req;
 
-            userDb[userId] = newUserInfo;
+            const index = users.findIndex((u) => u.id === user.id);
+            users[index] = {...users[index], ...body};
 
-            res.json('Updated');
+            await fileService.writer(users);
+
+            res.status(201).json(users[index]);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    deleteUser: async (req, res, next) => {
+        try {
+            const {user, users} = req;
+
+            const index = users.findIndex((u) => u.id === user.id);
+            users.splice(index, 1);
+
+            await fileService.writer(users);
+
+            res.sendStatus(204);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    create: async (req, res, next) => {
+        try {
+            const userInfo = req.body;
+
+            const users = await fileService.readDer();
+
+            const newUser = {
+                name: userInfo.name,
+                age: userInfo.age,
+                id: users[users.length - 1].id + 1
+            };
+            users.push(newUser);
+
+            await fileService.writer(users);
+
+            res.status(201).json(newUser);
         } catch (e) {
             next(e);
         }

@@ -5,18 +5,12 @@ const middleware = require("../middleware/user.middleware");
 
 router.get('/', controller.getAllUsers);
 
-router.post('/', middleware.checkIsUserExist ,controller.getAllUsers);
+router.post('/', middleware.isBodyValidCreate, controller.create);
 
-// router.post('/', (req, res) => {
-//     const userInfo = req.body;
-//
-//     userDb.push(userInfo);
-//
-//     res.status(201).json('Created');
-// });
+router.put('/:userId', middleware.isIdValid, middleware.isBodyValidUpdate, middleware.checkIsUserExist, controller.updateUser);
 
-router.put('/:userId', middleware.checkIsUserExist, controller.updateUser);
+router.delete('/:userId', middleware.isIdValid, middleware.checkIsUserExist, controller.deleteUser);
 
-router.get('/:userId', middleware.checkIsUserExist, controller.getUserById);
+router.get('/:userId', middleware.isIdValid, middleware.checkIsUserExist, controller.getUserById);
 
 module.exports = router;
