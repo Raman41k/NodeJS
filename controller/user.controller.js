@@ -1,11 +1,12 @@
-const userDb = require("../dataBase/users");
+const userDb = require("../dataBase/users.json");
+const {fileService} = require("../service");
 
 module.exports = {
-    getAllUsers: (req, res, next) => {
+    getAllUsers: async (req, res, next) => {
         try {
-            console.log('Users Endpoint');
+            const users = await fileService.readDer();
 
-            res.json(userDb);
+            res.json(users);
         } catch (e) {
             next(e);
         }

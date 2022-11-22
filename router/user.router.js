@@ -5,6 +5,8 @@ const middleware = require("../middleware/user.middleware");
 
 router.get('/', controller.getAllUsers);
 
+router.post('/', middleware.checkIsUserExist ,controller.getAllUsers);
+
 // router.post('/', (req, res) => {
 //     const userInfo = req.body;
 //
