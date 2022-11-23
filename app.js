@@ -24,7 +24,7 @@ app.use((err,req, res, next) => {
     });
 });
 
-app.listen(configs.PORT,  () => {
-    mongoose.connect(configs.MONGO_URL);
+app.listen(configs.PORT,  async () => {
     console.log(`Server listen ${configs.PORT}`);
+    await mongoose.connect(`${configs.MONGO_URL}`);
 });
