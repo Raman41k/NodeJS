@@ -13,6 +13,8 @@ module.exports = {
 
     getUserById: async (req, res, next) => {
         try {
+            const users = await userService.findOneByParams();
+
             res.json(req.user);
         } catch (e) {
             next(e);
