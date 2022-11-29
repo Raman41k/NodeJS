@@ -11,4 +11,10 @@ router.post(
     controller.login
 );
 
+router.post(
+    '/refresh',
+    middleware.checkRefreshToken,
+    controller.refresh
+);
+
 module.exports = router;
