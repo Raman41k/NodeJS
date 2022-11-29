@@ -9,6 +9,24 @@ module.exports = {
         return User.findOne(filter);
     },
 
+    findByIdWithCars: async (userId) => {
+        const res = await User.aggregate([
+            {
+                $match: {_id: userId}
+            },
+            {
+                $lookup: {
+                    from: 'cars',
+                    localField: '_id',
+                    foreignField: 'user',
+                    as: 'cars',
+                }
+            }
+        ]);
+
+        return res[0];
+    },
+
     updateOne: async (userId, newInfo) => {
         return User.findByIdAndUpdate(userId, newInfo, {new: true});
     },
