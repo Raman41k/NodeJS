@@ -17,4 +17,16 @@ router.post(
     controller.refresh
 );
 
+router.post(
+    '/logout',
+    middleware.checkAccessToken,
+    controller.logout
+);
+
+router.post(
+    '/logoutAll',
+    middleware.checkAccessToken,
+    controller.logoutAll
+);
+
 module.exports = router;
