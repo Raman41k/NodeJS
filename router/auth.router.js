@@ -18,6 +18,17 @@ router.post(
 );
 
 router.post(
+    '/password/forgot',
+    userMiddleware.getUserDynamically('email'),
+    controller.forgotPassword
+);
+
+router.put(
+    '/password/forgot',
+    controller.forgotPasswordAfterForgot
+);
+
+router.post(
     '/logout',
     middleware.checkAccessToken,
     controller.logout

@@ -70,4 +70,26 @@ module.exports = {
         }
     },
 
+    checkActionToken: async (req, res, next) => {
+        try {
+            const actionToken = req.get('Authorization');
+
+            if (!actionToken) {
+                throw new ApiError('No token', 401);
+            }
+
+            oauthService.checkActionToken(actionToken, FORGOT_PASS);
+
+            // const tokenInfo = await OAuth.findOne({actionToken});
+            //
+            // if (!tokenInfo) {
+            //     throw new ApiError('Token not valid', 401);
+            // }
+
+            req.tokenInfo = tokenInfo;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };
