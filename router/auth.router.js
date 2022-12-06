@@ -25,6 +25,7 @@ router.post(
 
 router.put(
     '/password/forgot',
+    middleware.checkActionToken,
     controller.forgotPasswordAfterForgot
 );
 
