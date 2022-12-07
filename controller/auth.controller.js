@@ -12,7 +12,7 @@ module.exports = {
         try {
             const {user, body} = req;
 
-            await emailService.sendEmail('romangugel@gmail.com', WELCOME, {userName: user.name});
+            await emailService.sendEmail(user.email, WELCOME, {userName: user.name});
 
             await oauthService.comparePasswords(user.password, body.password);
 
@@ -48,14 +48,14 @@ module.exports = {
     forgotPassword: async (req, res, next) => {
         try {
 
-            const user = req.user;
+            const {_id, email, name} = req.user;
 
-            const actionToken = oauthService.generateActionToken(FORGOT_PASSWORD, {email: user.email});
+            const actionToken = oauthService.generateActionToken(FORGOT_PASSWORD, {email: email});
 
             const forgotPassFEUrl = `${FRONTEND_URL}/password/new?token=${actionToken}`;
 
-            await ActionToken.create({token: actionToken, _user_id: user._id, tokenType: FORGOT_PASSWORD});
-            await emailService.sendEmail('romangugel@gmail.com', FORGOT_PASS, {url: forgotPassFEUrl})
+            await ActionToken.create({token: actionToken, _user_id: _id, tokenType: FORGOT_PASSWORD});
+            await emailService.sendEmail(email, FORGOT_PASS, {url: forgotPassFEUrl, userName: name})
 
             res.json('ok');
         } catch (e) {
