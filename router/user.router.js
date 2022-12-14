@@ -18,7 +18,7 @@ router.post(
 router.get(
     '/:userId',
     middleware.isUserIdValid,
-    authMiddleware.checkAccessToken,
+    // authMiddleware.checkAccessToken,
     middleware.getUserDynamically('userId', 'params', '_id'),
     controller.getUserById
 );
