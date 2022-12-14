@@ -6,7 +6,8 @@ module.exports = {
         name: Joi.string().min(2).max(100).required().default(''),
         email: Joi.string().regex(regex.EMAIL).lowercase().trim().required(),
         password: Joi.string().regex(regex.PASSWORD).required(),
-        age: Joi.number().integer().min(1).max(120)
+        age: Joi.number().integer().min(1).max(120),
+        phone: Joi.string().regex(regex.PHONE)
     }),
 
     editUserValidator: Joi.object({
